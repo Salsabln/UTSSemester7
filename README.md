@@ -12,7 +12,7 @@ Project Ujian Tengah Semester ini yaitu membuat Web Service REST untuk sistem ma
 1. Jalankan XAMPP Control Panel dan aktifkan Apache dan MySQL  
 2. Buat folder baru bernama tugas_uts di dalam direktori htdocs XAMPP Anda.  
 ## 2. Membuat Database
-1. Buka phpMyAdmin (http://localhost/phpmyadmin)  
+1. Buka phpMyAdmin http://localhost/phpmyadmin   
 2. Buat database baru bernama courses  
 3. Pilih database courses, lalu buka tab SQL  
 4. Jalankan query SQL berikut untuk membuat tabel dan menambahkan data sampel:
@@ -40,36 +40,28 @@ INSERT INTO courses (title, instructor, duration, price) VALUES
 <?php
 header("Content-Type: application/json");
 
-// Konfigurasi database
 $host = 'localhost';
 $db_name = 'courses';
 $username = 'root';
 $password = '';
 
-// Koneksi ke database
 $conn = new mysqli($host, $username, $password, $db_name);
 
-// Cek koneksi
 if ($conn->connect_error) {
     die(json_encode(["status" => "error", "message" => "Koneksi gagal: " . $conn->connect_error]));
 }
 
-// Mendapatkan method dari request
 $method = $_SERVER['REQUEST_METHOD'];
 
-// Menangani permintaan berdasarkan method
 switch ($method) {
     case 'GET':
-        // Cek apakah ID diterima dari URL
         if (isset($_GET['id'])) {
             $id = intval($_GET['id']);
-            // Query untuk mendapatkan detail data berdasarkan ID
             $query = "SELECT * FROM courses WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            // Cek apakah ada hasil
             if ($result->num_rows > 0) {
                 $course = $result->fetch_assoc();
                 echo json_encode(["status" => "success", "message" => "Data ditemukan", "data" => $course]);
@@ -79,9 +71,7 @@ switch ($method) {
             }
             $stmt->close();
         } else {
-            // Jika ID tidak diberikan, periksa apakah ada parameter pencarian
             $search = isset($_GET['title']) ? $_GET['title'] : '';
-            // Query untuk mendapatkan semua data atau berdasarkan pencarian
             $query = "SELECT * FROM courses";
             if ($search) {
                 $search = $conn->real_escape_string($search);
@@ -101,20 +91,16 @@ switch ($method) {
         break;
 
     case 'POST':
-        // Mendapatkan data dari request body
         $data = json_decode(file_get_contents("php://input"), true);
-        // Validasi input
         if (empty($data['title']) || empty($data['instructor']) || !isset($data['duration']) || !isset($data['price'])) {
             http_response_code(400);
             echo json_encode(["status" => "error", "message" => "Semua field harus diisi.", "data" => null]);
             exit();
         }
-        // Menambahkan data baru
         $title = $conn->real_escape_string($data['title']);
         $instructor = $conn->real_escape_string($data['instructor']);
         $duration = intval($data['duration']);
         $price = floatval($data['price']);
-        // Query untuk memasukkan data
         $query = "INSERT INTO courses (title, instructor, duration, price) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("ssdi", $title, $instructor, $duration, $price);
@@ -129,31 +115,24 @@ switch ($method) {
         break;
 
     case 'PUT':
-        // Ambil ID dari parameter URL
         if (isset($_GET['id'])) {
             $id = intval($_GET['id']);
-            // Query untuk mendapatkan detail data berdasarkan ID
             $query = "SELECT * FROM courses WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            // Cek apakah ada hasil
             if ($result->num_rows > 0) {
-                // Mendapatkan data dari request body
                 $data = json_decode(file_get_contents("php://input"), true);
-                // Validasi input
                 if (empty($data['title']) || empty($data['instructor']) || !isset($data['duration']) || !isset($data['price'])) {
                     http_response_code(400);
                     echo json_encode(["status" => "error", "message" => "Semua field harus diisi.", "data" => null]);
                     exit();
                 }
-                // Mengupdate data
                 $title = $conn->real_escape_string($data['title']);
                 $instructor = $conn->real_escape_string($data['instructor']);
                 $duration = intval($data['duration']);
                 $price = floatval($data['price']);
-                // Query untuk mengupdate data
                 $queryUpdate = "UPDATE courses SET title = ?, instructor = ?, duration = ?, price = ? WHERE id = ?";
                 $stmtUpdate = $conn->prepare($queryUpdate);
                 $stmtUpdate->bind_param("ssdii", $title, $instructor, $duration, $price, $id);
@@ -177,35 +156,29 @@ switch ($method) {
         break;
 
     case 'DELETE':
-        // Ambil ID dari parameter URL
         if (isset($_GET['id'])) {
             $id = intval($_GET['id']);
-            // Query untuk memeriksa apakah data dengan ID tersebut ada
             $queryCheck = "SELECT * FROM courses WHERE id = ?";
             $stmtCheck = $conn->prepare($queryCheck);
             $stmtCheck->bind_param("i", $id);
             $stmtCheck->execute();
             $resultCheck = $stmtCheck->get_result();
-        
-            // Cek apakah data ditemukan
+
             if ($resultCheck->num_rows > 0) {
-                // Data ditemukan, lakukan penghapusan
                 $queryDelete = "DELETE FROM courses WHERE id = ?";
                 $stmtDelete = $conn->prepare($queryDelete);
                 $stmtDelete->bind_param("i", $id);
                 $stmtDelete->execute();
         
-                // Cek apakah penghapusan berhasil
                 if ($stmtDelete->affected_rows > 0) {
-                    http_response_code(200); // Status OK
+                    http_response_code(200); 
                     echo json_encode(["status" => "success", "message" => "Data Berhasil Dihapus", "data" => null]);
                 } else {
-                    http_response_code(500); // Kesalahan server
+                    http_response_code(500);
                     echo json_encode(["status" => "error", "message" => "Gagal menghapus data.", "data" => null]);
                 }
                 $stmtDelete->close();
             } else {
-                // Data tidak ditemukan
                 http_response_code(404);
                 echo json_encode(["status" => "error", "message" => "Data tidak ditemukan", "data" => null]);
             }
@@ -222,7 +195,6 @@ switch ($method) {
         break;
 }
 
-// Tutup koneksi
 $conn->close();
 ?>
 ```
@@ -241,7 +213,7 @@ $conn->close();
 ## b. GET Specific Courses
 ### Menampilkan detail data berdasarkan ID
 - Method: GET
-- URL: http://localhost/tugas_uts/courses_api.php?id=5 (untuk buku dengan ID 5)
+- URL: http://localhost/tugas_uts/courses_api.php?id=5 (untuk courses dengan ID 5)
 - Klik "Send"
 ### Response 404 jika data tidak ditemukan
 - Method: GET
