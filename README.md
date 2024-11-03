@@ -217,7 +217,7 @@ $conn->close();
 - Klik "Send"
 ### Response 404 jika data tidak ditemukan
 - Method: GET
-- URL: http://localhost/tugas_uts/courses_api.php?id=8 (untuk ID 8)
+- URL: http://localhost/tugas_uts/courses_api.php?id=8 (untuk courses dengan ID 8)
 - Klik "Send"
 ## c. POST New Courses
 ### Menambah data baru Courses
@@ -259,12 +259,12 @@ $conn->close();
 ```
 ### Response 404 jika data tidak ditemukan
 - Method: PUT
-- URL: http://localhost/tugas_uts/courses_api.php?id=9 (asumsikan ID adalah 9)
+- URL: http://localhost/tugas_uts/courses_api.php?id=9 (asumsikan courses dengan ID adalah 9)
 - Klik "Send"
 ## e. DELETE Book
 ### Menghapus data berdasarkan ID
 - Method: DELETE
-- URL: http://localhost/tugas_uts/courses_api.php?id=12 (untuk menghapus courses dengan ID 5)
+- URL: http://localhost/tugas_uts/courses_api.php?id=6 (untuk menghapus courses dengan ID 6)
 - Klik "Send"
 ### Response 404 jika data tidak ditemukan
 - Method: DELETE
