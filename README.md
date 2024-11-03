@@ -22,7 +22,7 @@ CREATE TABLE courses (
     title VARCHAR(255) NOT NULL,
     instructor VARCHAR(255) NOT NULL,
     duration INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL
+    price FLOAT (10, 2) NOT NULL
 );
 
 INSERT INTO courses (title, instructor, duration, price) VALUES 
