@@ -261,7 +261,7 @@ $conn->close();
 - Method: PUT
 - URL: http://localhost/tugas_uts/courses_api.php?id=9 (asumsikan courses dengan ID adalah 9)
 - Klik "Send"
-## e. DELETE Book
+## e. DELETE Courses
 ### Menghapus data berdasarkan ID
 - Method: DELETE
 - URL: http://localhost/tugas_uts/courses_api.php?id=6 (untuk menghapus courses dengan ID 6)
