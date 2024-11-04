@@ -32,7 +32,7 @@ INSERT INTO courses (title, instructor, duration, price) VALUES
 ('Pembelajaran Mesin untuk Pemula', 'Bapak Joko Widodo', 45, 600000.00), 
 ('Keamanan Siber untuk Pemula', 'Ibu Rina Sari', 35, 450000.00);
 ```
-## Membuat File PHP untuk Web Service
+## 3. Membuat File PHP untuk Web Service
 1. Buka text editor Anda seperti Visual Studio Code
 2. Buat file baru dan simpan sebagai courses_api.php di dalam folder tugas_uts.
 3. Salin dan tempel kode berikut ke dalam courses_api.php:
@@ -198,7 +198,7 @@ switch ($method) {
 $conn->close();
 ?>
 ```
-## Pengujian Menggunakan Postman
+## 4. Pengujian Menggunakan Postman
 1. Buka Postman
 2. Buat request baru untuk setiap operasi berikut:
 ## a. GET All Courses & Tittle
